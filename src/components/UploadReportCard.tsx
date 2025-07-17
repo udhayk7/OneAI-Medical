@@ -120,7 +120,8 @@ export const UploadReportCard: React.FC = () => {
       recognitionRef.current.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
         setError('Speech recognition error: ' + event.error);
-        stopRecording();
+        // Do NOT stop recording if speech recognition fails
+        // Do not call stopRecording here
       };
     }
   }, []);
@@ -185,28 +186,8 @@ export const UploadReportCard: React.FC = () => {
   }, [isRecording]);
 
   // Handlers
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    setError(null);
-    setLiveTranscript('');
-    setIsLiveMode(false);
-    
-    if (!file) return;
-    
-    // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
-      setError('File size exceeds 10MB limit');
-      return;
-    }
-    
-    // Validate file type
-    if (!ALLOWED_AUDIO_TYPES.includes(file.type)) {
-      setError('Unsupported audio format. Please use MP3, WAV, M4A, WEBM, or MPEG');
-      return;
-    }
-    
-    setAudioFile(file);
-  };
+  // Remove file input and file upload logic
+  // Only allow recording, playback, and submission
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -275,7 +256,7 @@ export const UploadReportCard: React.FC = () => {
 
   return (
     <div className="max-w-xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-8">
-      <h2 className="text-2xl font-bold mb-4">Upload or Record Audio for Medical Report</h2>
+      <h2 className="text-2xl font-bold mb-4">Record Audio for Medical Report</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block font-medium mb-1">Patient ID</label>
@@ -301,14 +282,7 @@ export const UploadReportCard: React.FC = () => {
           </select>
         </div>
         <div>
-          <label className="block font-medium mb-1">Audio File</label>
-          <input
-            type="file"
-            accept={ALLOWED_AUDIO_TYPES.join(',')}
-            onChange={handleFileChange}
-            ref={fileInputRef}
-            className="mb-2"
-          />
+          <label className="block font-medium mb-1">Audio Recording</label>
           <div className="flex items-center space-x-2 mt-2">
             {!isRecording && (
               <button

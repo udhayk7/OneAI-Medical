@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import { UploadReportCard } from './components/UploadReportCard';
+import { HomeLayout } from './components/HomeLayout';
 import { LoginDoctor } from './auth/LoginDoctor';
 import { RegisterDoctor } from './auth/RegisterDoctor';
 import './index.css';
@@ -38,18 +38,11 @@ const App: React.FC = () => {
       </div>
     );
   }
+  // Pass doctor info and logout handler to HomeLayout
+  const doctorName = localStorage.getItem('doctor_name') || 'Doctor';
+  const doctorEmail = localStorage.getItem('doctor_email') || '';
   return (
-    <div>
-      <div className="flex justify-end p-4">
-        <button
-          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-      </div>
-      <UploadReportCard />
-    </div>
+    <HomeLayout doctorName={doctorName} doctorEmail={doctorEmail} onLogout={handleLogout} />
   );
 };
 
